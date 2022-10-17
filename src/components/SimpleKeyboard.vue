@@ -1,7 +1,6 @@
 <template>
   <div class="keyboardContainer">
     <div class="simple-keyboard-main"></div>
-
     <div class="numPad">
       <div class="simple-keyboard-numpad"></div>
       <div class="simple-keyboard-numpadEnd"></div>
@@ -31,13 +30,17 @@ export default {
   }),
   mounted() {
     let commonKeyboardOptions = {
-      onChange: input => this.onChange(input),
-      onKeyPress: button => this.onKeyPress(button),
+      onChange: (input) => this.onChange(input),
+      onKeyPress: (button) => this.onKeyPress(button),
       theme: "simple-keyboard hg-theme-default hg-layout-default",
       physicalKeyboardHighlight: true,
       syncInstanceInputs: true,
       mergeDisplay: true,
-      debug: true
+      debug: false,
+      display: {
+  '{backspace}': 'Hapus',
+  '{enter}': 'OK',
+}
     };
     this.keyboard = new Keyboard(".simple-keyboard-main", {
       ...commonKeyboardOptions,
@@ -50,9 +53,10 @@ export default {
           "q w e r t y u i o p {backspace}",
           "a s d f g h j k l",
           "z x c v b n m",
-          "{enter}"
+          "{enter}",
         ],
-      }});
+      },
+    });
     this.keyboardNumPad = new Keyboard(".simple-keyboard-numpad", {
       ...commonKeyboardOptions,
       layout: {
@@ -60,9 +64,9 @@ export default {
           "{numpad7} {numpad8} {numpad9}",
           "{numpad4} {numpad5} {numpad6}",
           "{numpad1} {numpad2} {numpad3}",
-          "{numpad0}"
-        ]
-      }
+          "{numpad0}",
+        ],
+      },
     });
   },
   methods: {
@@ -70,6 +74,7 @@ export default {
       this.$emit("onChange", input);
     },
     onKeyPress(button) {
+      // console.log(button);
       this.$emit("onKeyPress", button);
 
       /**

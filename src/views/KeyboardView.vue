@@ -1,48 +1,122 @@
 <template>
-<v-container class="py-8 px-6" fluid>
-  <v-row>
-     <v-col cols="12" class="justify-center">
-    <input
-      :value="input"
-      class="input"
-      @input="onInputChange"
-      placeholder="Tap on the virtual keyboard to start"
-    />
-    </v-col>
-     <v-col cols="12" class="justify-center">
-    <SimpleKeyboard
-      @onChange="onChange"
-      @onKeyPress="onKeyPress"
-      :input="input"
-    />
-    </v-col>
-  </v-row>
+  <v-container class="py-8 px-6" fluid>
+    <v-row>
+      <v-col cols="12" class="justify-center">
+        <v-text-field
+          ref="booking"
+          label=""
+          filled
+          dense
+          :autofocus="true"
+          :value="input"
+          class="input"
+          @input="onInputChange"
+          placeholder="Tap on the virtual keyboard to start"
+          @keyup.enter="onEnter"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" class="justify-center">
+        <SimpleKeyboard
+          @onChange="onChange"
+          @onKeyPress="onKeyPress"
+          :input="input"
+        />
+      </v-col>
+      <check-view :visible="isConfirm" @update-number="update" :users="bookingdata" />
+    </v-row>
+    <v-dialog v-model="loaddialog" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
+        <v-card-text>
+          Mengambil Data
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
-// import "./App.css";
+import CheckView from "@/views/CheckView.vue";
 
 export default {
   //   name: "view-keyboard",
   components: {
     SimpleKeyboard,
+    CheckView,
   },
   data: () => ({
     input: "",
+    loaddialog: false,
+    bookingdata: "",
+    isConfirm: false,
   }),
   methods: {
+    changeConfirm(status) {
+      this.isConfirm = true;
+      this.input = "";
+      this.$refs.booking.$el.focus();
+    },
     onChange(input) {
       this.input = input;
+      this.$refs.booking.$el.focus();
     },
     onKeyPress(button) {
       console.log("button", button);
+      // this.$refs.booking.$el.focus();
+      if (button == "{enter}") {
+        this.loaddialog = true;
+        this.getDataFromAPI();
+      }
+    },
+    onEnter() {
+      // alert(this.input)
+      this.loaddialog = true;
+      this.getDataFromAPI();
     },
     onInputChange(input) {
-      this.input = input.target.value;
+      this.input = input;
+    },
+    update(number) {
+      // console.log("PPP" + number);
+      this.isConfirm = number;
+      this.input = "";
+      this.$refs.booking.$el.focus();
+    },
+    getRequestParams(kd_booking) {
+      let params = {};
+      // console.log(kd_booking);
+      if (kd_booking) {
+        params["kd_booking"] = kd_booking;
+      }
+      return params;
+    },
+    async getDataFromAPI() {
+      console.log(this.input);
+      // const params = this.input;
+      const fmdt = new FormData();
+      fmdt.append('kd_booking', this.input);
+      axios
+        .post("WSDaftar/getRegistrasiByBooking", fmdt)
+        .then((response) => {
+          this.loading = false;
+          this.bookingdata = response.data.data;
+          // this.bookingdata = "ASDA"
+          this.loaddialog = false;
+          this.isConfirm = true;
+          // this.dataPasien= 
+        });
+    },
+    setFocus: function() {
+      // Note, you need to add a ref="search" attribute to your input.
+     this.$refs.booking.$el.focus();
     },
   },
+  mounted() {},
 };
 </script>
 
@@ -180,5 +254,4 @@ input {
 .hg-button.hg-functionBtn.hg-button-space {
   width: 350px;
 }
-
 </style>
