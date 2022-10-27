@@ -1,20 +1,18 @@
 <template>
-  <v-app>
-    <v-main>
-      <v-container>
-
-      <router-view />
-      </v-container>
-    </v-main>
-  </v-app>
+    <router-view></router-view> 
 </template>
-
 <script>
+
 export default {
-  name: "App",
+  name: 'App',
 
   data: () => ({
     //
   }),
+	watch: {
+		'$route' (to, from) {
+			document.title = to.meta.title || 'Other Title'
+		}
+	}
 };
 </script>

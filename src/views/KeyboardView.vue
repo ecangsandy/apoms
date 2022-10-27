@@ -2,6 +2,9 @@
   <v-container class="py-8 px-6" fluid>
     <v-row>
       <v-col cols="12" class="justify-center">
+        <p class="text-h4 text--primary text-center mb-10" >
+        Anjungan Pendaftaran Online Mandiri (APOM)
+      </p>
         <v-text-field
           ref="booking"
           label=""
@@ -42,7 +45,6 @@
 <script>
 import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
-
 export default {
   //   name: "view-keyboard",
   components: {
@@ -80,6 +82,7 @@ export default {
     },
     onInputChange(input) {
       this.input = input;
+      this.setFocus()
     },
     update(number) {
       // console.log("PPP" + number);
@@ -95,21 +98,42 @@ export default {
       }
       return params;
     },
+    logout(evt) {
+      if (confirm("Are you sure you want to log out?")) {
+        //    utils.removeHeaderToken()
+        this.$router.push({ name: "login" });
+        delete axios.defaults.headers.common["Authorization"];
+        localStorage.removeItem("token");
+      }
+    },
     async getDataFromAPI() {
       console.log(this.input);
+      if (this.input == ':logout') {
+        this.logout()
+      }else{
       // const params = this.input;
+      axios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
       const fmdt = new FormData();
       fmdt.append('kd_booking', this.input);
       axios
         .post("WSDaftar/getRegistrasiByBooking", fmdt)
+        // .post("Pendaftaran/getRegistrasiByBooking", fmdt)
         .then((response) => {
-          this.loading = false;
+          if(response.data.error != true){
+
+            this.isConfirm = true;
           this.bookingdata = response.data.data;
+          }else{
+            alert('Kode Booking Tidak ditemukan');
+            this.input='';
+            this.setFocus()
+          }
+          this.loading = false;
           // this.bookingdata = "ASDA"
           this.loaddialog = false;
-          this.isConfirm = true;
           // this.dataPasien= 
         });
+      }
     },
     setFocus: function() {
       // Note, you need to add a ref="search" attribute to your input.

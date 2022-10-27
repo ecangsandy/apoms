@@ -1,0 +1,11 @@
+page{
+    font-size:25px;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+@media print {
+    @page {
+        size: A4 landscape;
+      }
+  }
+  

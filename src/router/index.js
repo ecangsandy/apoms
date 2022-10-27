@@ -8,13 +8,17 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
-  },
-  {
-    path: "/keyboard",
-    name: "keyboard",
-    component: Dashboard,
+    name: "",
+    redirect: "keyboard",
+    component: () => import("@/components/Main"),
+    children: [
+      {
+        path: "/keyboard",
+        name: "keyboard",
+        component: Dashboard,
+        meta: { title: 'APOM' } 
+      },
+    ]
   },
   {
     path: "/about",
@@ -24,6 +28,27 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "/print",
+    name: "print",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/PrintView.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () =>
+      import("@/components/LoginPage"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () =>
+      import("@/views/PendaftaranView"),
   },
 ];
 
