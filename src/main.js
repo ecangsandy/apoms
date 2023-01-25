@@ -9,14 +9,20 @@ import VueFilterDateFormat from 'vue-filter-date-format';
 
 // const qz = require("qz-tray");
 const token = localStorage.getItem("token");
+// const base1 = 'http://172.166.122.218/vue-service/index.php/api'
 
 import axios from "axios";
-import { setHeaderToken } from "./utils/auth";
+import { mainAxios,
+  apomAxios } from "./utils/apilocal";
+// import { setHeaderToken } from "./utils/auth";
 // axios.defaults.baseURL = "http://172.166.122.218/";
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // const fs = require('./assets')
 axios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
-// axios.defaults.baseURL = "http://172.166.122.218/vue-service/index.php/api/";
+// axios.defaults.baseURL = "h";
+// const axios1 = axios.create({
+//   baseURL: 'ttp://172.166.122.218/vue-service/index.php/api/'
+// });
 const options = {
   name: '_blank',
   specs: [
@@ -47,9 +53,9 @@ Vue.config.productionTip = false;
 //   render: (h) => h(App),
 // }).$mount("#app");
 
-if (token) {
-  setHeaderToken(token);
-}
+// if (token) {
+//   setHeaderToken(token);
+// }
 store.dispatch("get_user", token).then(() => {
   new Vue({
     mode: "history",
@@ -57,19 +63,22 @@ store.dispatch("get_user", token).then(() => {
     store,
     vuetify,
     VueHtmlToPaper,
+    mainAxios,
+    apomAxios,
+
     // vuetify,
     render: (h) => h(App)
   }).$mount("#app");
 });
 router.beforeEach((to, from, next) => {
-  const publicPages = ["/login", "/register"];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("token");
-  // trying to access a restricted page + not logged in
-  // redirect to login page
-  if (authRequired && !loggedIn) {
-    next("/login");
-  } else {
-    next();
-  }
+  // const publicPages = ["/login"];
+  // const authRequired = !publicPages.includes(to.path);
+  // const loggedIn = localStorage.getItem("token");
+  // // trying to access a restricted page + not logged in
+  // // redirect to login page
+  // if (authRequired && !loggedIn) {
+  //   next("/login");
+  // } else {
+  // }
+  next();
 });

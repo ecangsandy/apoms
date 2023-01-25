@@ -6,7 +6,7 @@
         aria-label="Main navigation"
       >
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Offcanvas navbar</a>
+          <a class="navbar-brand" href="#">Pendaftaran Rawat Jalan</a>
           <button
             class="navbar-toggler p-0 border-0"
             type="button"
@@ -27,29 +27,13 @@
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Notifications</a>
+               <router-link class="nav-link" to="/register">Pendaftaran Pasien</router-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Profile</a>
+                <router-link class="nav-link" to="/register">Pendaftaran Pasien</router-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Switch account</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  >Settings</a
-                >
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </li>
-                </ul>
+                <a class="nav-link" href="#" @click="logout">Logout</a>
               </li>
             </ul>
             <form class="d-flex" role="search">
@@ -350,6 +334,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "bootstrap-vue/dist/bootstrap-vue-icons.min.css";
 import axios from "axios";
+import { mapGetters } from "vuex";
 // import http from '@/http-commont'
 export default {
   name: "Login-item",
@@ -385,6 +370,12 @@ export default {
     //   //   }
     //   this.items = dokterlis;
     // });
+  },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: "isLoggedIn",
+      user: "user",
+    }),
   },
   methods: {
     validate() {
@@ -439,6 +430,14 @@ export default {
             // this.errorresponse = error.response.data.errors;
             // console.log(errors);
           });
+      }
+    },
+    logout(evt) {
+      if (confirm("Are you sure you want to log out?")) {
+        //    utils.removeHeaderToken()
+        this.$router.push({ name: "login" });
+        delete axios.defaults.headers.common["Authorization"];
+        localStorage.removeItem("token");
       }
     },
   },

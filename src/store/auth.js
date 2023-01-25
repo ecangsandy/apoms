@@ -32,7 +32,6 @@ export default {
                 axios.post('Auth/login', data)
                     .then(response => {
                         if(response.data.status != 401){
-
                             const token = response.data.token
                             localStorage.setItem('token', token)
                             setHeaderToken(token)
@@ -56,7 +55,7 @@ export default {
                 axios.defaults.baseURL = "http://172.166.122.218/vue-service/index.php/";
                 let response = await axios.get('Auth/profile')
                 commit('set_user', response.data.data)
-                console.log(response.data);
+                // console.log(response.data);
                 if(response.data === false){
                 //  commit('reset_user')
                 localStorage.removeItem('token')

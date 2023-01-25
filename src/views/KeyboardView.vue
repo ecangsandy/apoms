@@ -2,9 +2,9 @@
   <v-container class="py-8 px-6" fluid>
     <v-row>
       <v-col cols="12" class="justify-center">
-        <p class="text-h4 text--primary text-center mb-10" >
-        Anjungan Pendaftaran Online Mandiri (APOM)
-      </p>
+        <p class="text-h4 text--primary text-center mb-10">
+          Anjungan Pendaftaran Online Mandiri (APOM)
+        </p>
         <v-text-field
           ref="booking"
           label=""
@@ -16,6 +16,7 @@
           @input="onInputChange"
           placeholder="Tap on the virtual keyboard to start"
           @keyup.enter="onEnter"
+          align="center"
         ></v-text-field>
       </v-col>
       <v-col cols="12" class="justify-center">
@@ -25,7 +26,11 @@
           :input="input"
         />
       </v-col>
-      <check-view :visible="isConfirm" @update-number="update" :users="bookingdata" />
+      <check-view
+        :visible="isConfirm"
+        @update-number="update"
+        :users="bookingdata"
+      />
     </v-row>
     <v-dialog v-model="loaddialog" hide-overlay persistent width="300">
       <v-card color="primary" dark>
@@ -45,6 +50,7 @@
 <script>
 import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
+import { apomAxios } from "@/utils/apilocal";
 export default {
   //   name: "view-keyboard",
   components: {
@@ -82,7 +88,7 @@ export default {
     },
     onInputChange(input) {
       this.input = input;
-      this.setFocus()
+      this.setFocus();
     },
     update(number) {
       // console.log("PPP" + number);
@@ -108,36 +114,44 @@ export default {
     },
     async getDataFromAPI() {
       console.log(this.input);
-      if (this.input == ':logout') {
-        this.logout()
-      }else{
-      // const params = this.input;
-      axios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
-      const fmdt = new FormData();
-      fmdt.append('kd_booking', this.input);
-      axios
-        .post("WSDaftar/getRegistrasiByBooking", fmdt)
-        // .post("Pendaftaran/getRegistrasiByBooking", fmdt)
-        .then((response) => {
-          if(response.data.error != true){
-
-            this.isConfirm = true;
-          this.bookingdata = response.data.data;
-          }else{
-            alert('Kode Booking Tidak ditemukan');
-            this.input='';
-            this.setFocus()
-          }
-          this.loading = false;
-          // this.bookingdata = "ASDA"
-          this.loaddialog = false;
-          // this.dataPasien= 
-        });
+      if (this.input == ":logout") {
+        this.logout();
+      } else {
+        // const params = this.input;
+        // apomAxios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
+        const fmdt = new FormData();
+        fmdt.append("kd_booking", this.input);
+        apomAxios
+          .post("WSDaftar/getRegistrasiByBooking", fmdt, { timeout: 2000 })
+          // .post("Pendaftaran/getRegistrasiByBooking", fmdt)
+          .then((response) => {
+            console.log(response);
+            if (response.data.error != true) {
+              this.isConfirm = true;
+              this.bookingdata = response.data.data;
+            } else if(response.data.status == '204') {
+              alert(response.data.message);
+              this.input = "";
+              this.setFocus();
+            }
+            this.loading = false;
+            // this.bookingdata = "ASDA"
+            this.loaddialog = false;
+            // this.dataPasien=
+          })
+          .catch(function (error) {
+            // console.log(error.toJSON());
+            var err = error.toJSON();
+            // console.log(err.message);
+            alert(err.message);
+            // this.loading = false;
+            // this.loaddialog = false;
+          });
       }
     },
-    setFocus: function() {
+    setFocus: function () {
       // Note, you need to add a ref="search" attribute to your input.
-     this.$refs.booking.$el.focus();
+      this.$refs.booking.$el.focus();
     },
   },
   mounted() {},
@@ -145,6 +159,10 @@ export default {
 </script>
 
 <style scoped>
+body {
+    overflow: hidden;
+    height: 100vh;
+}
 input {
   width: 100%;
   height: 100px;
