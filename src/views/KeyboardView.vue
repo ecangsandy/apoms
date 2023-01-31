@@ -14,7 +14,7 @@
           :value="input"
           class="input"
           @input="onInputChange"
-          placeholder="Tap on the virtual keyboard to start"
+          placeholder="Masukan Kode Booking "
           @keyup.enter="onEnter"
           align="center"
         ></v-text-field>
@@ -133,6 +133,8 @@ export default {
               alert(response.data.message);
               this.input = "";
               this.setFocus();
+            }else {
+               alert(response.data.message);
             }
             this.loading = false;
             // this.bookingdata = "ASDA"
@@ -147,6 +149,9 @@ export default {
             // this.loading = false;
             // this.loaddialog = false;
           });
+          //  this.loading = false;
+          //   // this.bookingdata = "ASDA"
+          //   this.loaddialog = false;
       }
     },
     setFocus: function () {
@@ -154,7 +159,6 @@ export default {
       this.$refs.booking.$el.focus();
     },
   },
-  mounted() {},
 };
 </script>
 

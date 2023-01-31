@@ -14,6 +14,7 @@ const token = localStorage.getItem("token");
 import axios from "axios";
 import { mainAxios,
   apomAxios } from "./utils/apilocal";
+import {ips } from "./utils/apilocal";
 // import { setHeaderToken } from "./utils/auth";
 // axios.defaults.baseURL = "http://172.166.122.218/";
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -65,7 +66,7 @@ store.dispatch("get_user", token).then(() => {
     VueHtmlToPaper,
     mainAxios,
     apomAxios,
-
+    ips,
     // vuetify,
     render: (h) => h(App)
   }).$mount("#app");

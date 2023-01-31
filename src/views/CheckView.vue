@@ -1,9 +1,5 @@
 <template>
-  <v-dialog
-    v-model="visible"
-    fullscreen
-    transition="dialog-bottom-transition"
-  >
+  <v-dialog v-model="visible" fullscreen transition="dialog-bottom-transition">
     <v-card tile align="center">
       <v-toolbar dark color="primary">
         <v-btn icon dark @click="close">
@@ -31,7 +27,7 @@
               {{ messageerror }}
             </v-col>
             <v-col class="shrink">
-              <v-btn @click="cetakUlang">Cetak Ulang</v-btn>
+              <v-btn @click="cetakUlang" v-show="cetak_btn">Cetak Ulang</v-btn>
             </v-col>
           </v-row>
         </v-alert>
@@ -96,15 +92,31 @@
           <v-card-actions> </v-card-actions>
         </v-card>
       </v-col>
-    </v-card>
+    </v-card><v-alert prominent type="warning">
+          <v-row align="center">
+            <v-col class="grow">
+              {{ messagews }}
+            </v-col>
+          </v-row>
+        </v-alert>
+         <v-alert
+      dismissible
+      color="cyan"
+      border="left"
+      elevation="2"
+      colored-border
+      icon="mdi-twitter"
+    >
+      Your IP <strong>{{iplocal}}</strong> .
+    </v-alert>
     <PrintView :sep="dataSEP" :visible_sep="check_sep" />
   </v-dialog>
 </template>
 <script>
 import PrintView from "@/views/PrintView.vue";
-import { apomAxios, mainAxios } from "@/utils/apilocal";
+import { apomAxios, mainAxios, ips, iplocal } from "@/utils/apilocal";
 // import "../plugins/axios";
-// import { apomAxios, customAxios } from "@/utils/apilocal";
+// import { ips } from "@/utils/ws";
 export default {
   props: {
     users: {},
@@ -117,27 +129,30 @@ export default {
   },
 
   data: () => ({
+    messagews: false,
+    iplocal: false,
     cards: ["Today"],
     loading2: false,
-    dataSEP: {},
+    dataSEP: [],
     no_sep: false,
     visible_sep: false,
     imgttd: "",
-    check_sep:false,
+    check_sep: false,
     cetakulang: false,
     dtanrian: {},
     messageerror: null,
-    loading_print: false
+    loading_print: false,
+    cetak_btn: false,
+    connection: false,
   }),
   methods: {
     close() {
       this.$emit("update-number", false);
       this.cetakulang = false;
-      this.visible= false;
     },
     saveSEP() {
       this.loading_print = true;
-      // console.log( this.users);      
+      // console.log( this.users);
       const fmdt = new FormData();
       // fmdt.append("kd_booking", '9ZEUFO');
       fmdt.append("FS_MR", this.users.FS_MR);
@@ -156,9 +171,9 @@ export default {
       fmdt.append("fs_flag_proc", this.users.FS_FLAG_PROC);
       fmdt.append("fs_kd_penunjang", this.users.FS_KD_PENUNJANG);
       fmdt.append("fs_ass_pelayanan", this.users.FS_ASS_PELAYANAN);
-      if(this.users.no_kontrol_bpjs != null){
-        fmdt.append("no_kontrol_bpjs", this.users.no_kontrol_bpjs)
-      };
+      if (this.users.no_kontrol_bpjs != null) {
+        fmdt.append("no_kontrol_bpjs", this.users.no_kontrol_bpjs);
+      }
       fmdt.append("FS_KD_DPJP", this.users.FS_KD_DPJP);
       fmdt.append("FS_TLP_PASIEN", this.users.FS_TLP_PASIEN);
       fmdt.append("tglKunjungan", this.users.tglKunjunganBPJS);
@@ -180,15 +195,18 @@ export default {
           this.no_sep = sep_no;
           this.getDataSEP();
           //   this.visible_sep = true;
-        } else if (data.status == 400) {
+        } else if (data.status == 302) {
           // SEP already
           this.cetakulang = true;
           this.messageerror = data.message;
           // console.log(data.data.no_rm);
+          this.cetak_btn = true;
           this.dtanrian = data.data;
           this.getAntrian();
-        } else if(data.status == 204){
-             this.messageerror = data.message;
+        } else if (data.status == 204 || data.status == 400) {
+          this.cetakulang = true;
+          this.messageerror = data.message;
+          this.cetak_btn = false;
         }
         // this.getDataSEP();
 
@@ -230,6 +248,10 @@ export default {
         // this.dataPasien=
       });
     },
+    sendMessage(message) {
+      console.log(this.connection);
+      this.connection.send(message);
+    },
     async getDataSEP() {
       // console.log(this);
       // const params = this.input;
@@ -245,12 +267,30 @@ export default {
         // if (response.data.status == "201") {
         // console.log(response.data);
         // this.imgttd = "data:image/png;base64," + response.data.data.image_ttd;
+        var res = {
+          TTD_URL:
+            process.env.VUE_APP_URL_IMG + "asset/upload/signature/NZM315.jpg",
+        };
         this.dataSEP = response.data.data;
-        this.check_sep= true;
+        Object.assign(this.dataSEP, res);
+
+        var element = {};
+        element.ttd_url = process.env.VUE_APP_BASE_API_APOM + this.dataSEP;
+        // this.dataSEP = element.ttd_url;
+        // this.dataSEP.push(element);
+        this.check_sep = true;
         // this.$htmlToPaper("cetaksep");
-        this.$htmlToPaper("cetaksep", null, (e) => {
-          this.close();
+        // send to ws Print
+
+        const data = JSON.stringify({
+          command: "cetak",
+          type: "cetakSEPRJalan",
+          message: this.dataSEP,
         });
+        this.sendMessage(data);
+        // this.$htmlToPaper("cetaksep", null, (e) => {
+        //   this.close();
+        // });
         // }
         // this.bookingdata = "ASDA"
         this.loaddialog = false;
@@ -258,19 +298,38 @@ export default {
         // this.dataPasien=
       });
     },
-    print() {
-      // this.isConfirm = number;
-    },
-    async cetakUlang(){
+    async cetakUlang() {
       console.log(this.dtanrian.no_rm);
-    this.no_sep = this.dtanrian.fs_no_sep
-    // this.no_sep = this.dtanrian.fs_no_sep
-    this.getDataSEP();
+      this.no_sep = this.dtanrian.fs_no_sep;
+      // this.no_sep = this.dtanrian.fs_no_sep
+      this.getDataSEP();
     },
   },
   created: function () {
     // document.documentElement.style.overflow = "hidden"
     // console.log(this.users); //prints out an empty string
+  },
+  mounted() {
+
+   
+  },
+  created: function () {
+    //  console.log(ips);
+    this.connection = new WebSocket(ips);
+    this.messagews = ips
+    this.iplocal = iplocal ;
+    // console.log("Starting connection to WebSocket Server");
+
+    this.connection.onmessage = function (event) {
+      // this.messagews = "Nyambung";
+      console.log(event);
+    };
+
+    this.connection.onopen = function (event) {
+      this.messagews = "Nyambungss";
+      // console.log(event)
+      // console.log("Successfully connected to the echo websocket server...")
+    };
   },
 };
 </script>

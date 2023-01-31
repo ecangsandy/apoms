@@ -165,14 +165,14 @@
         <tr>
           <td style="padding: 0">
             <center>
-              <img
+              <img v-if="sep.image_ttd"
                 :src="'data:image/png;base64,' + sep.image_ttd"
                 width="90px"
                 style=""
               />
             </center>
             <br />
-            ............................
+            ................................................
           </td>
         </tr>
         <tr>
