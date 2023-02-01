@@ -31,6 +31,11 @@
         @update-number="update"
         :users="bookingdata"
       />
+       <setting
+        :visible="isSetting"
+        @close="close"
+        :users="bookingdata"
+      />
     </v-row>
     <v-dialog v-model="loaddialog" hide-overlay persistent width="300">
       <v-card color="primary" dark>
@@ -50,18 +55,21 @@
 <script>
 import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
+import Setting from "@/views/SettingView.vue";
 import { apomAxios } from "@/utils/apilocal";
 export default {
   //   name: "view-keyboard",
   components: {
     SimpleKeyboard,
     CheckView,
+    Setting
   },
   data: () => ({
     input: "",
     loaddialog: false,
     bookingdata: "",
     isConfirm: false,
+    isSetting: false,
   }),
   methods: {
     changeConfirm(status) {
@@ -96,6 +104,11 @@ export default {
       this.input = "";
       this.$refs.booking.$el.focus();
     },
+    close(){
+  this.isSetting = false;
+  this.input = "";
+      this.$refs.booking.$el.focus();
+    },
     getRequestParams(kd_booking) {
       let params = {};
       // console.log(kd_booking);
@@ -116,6 +129,10 @@ export default {
       console.log(this.input);
       if (this.input == ":logout") {
         this.logout();
+      } else if(this.input == ":SETTING"){
+ this.isSetting = true;
+  this.loading = false;
+  this.loaddialog = false;
       } else {
         // const params = this.input;
         // apomAxios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";

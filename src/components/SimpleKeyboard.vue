@@ -50,9 +50,9 @@ export default {
        */
       layout: {
         default: [
-          "q w e r t y u i o p {backspace}",
-          "a s d f g h j k l",
-          "z x c v b n m",
+          "Q W E R T Z U I O P {backspace}",
+          "A S D F G H J K L",
+          "Z X C V B N M",
           "{enter}",
         ],
       },

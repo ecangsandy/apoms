@@ -2,7 +2,7 @@
   <v-dialog v-model="visible" fullscreen transition="dialog-bottom-transition">
     <v-card tile align="center">
       <v-toolbar dark color="primary">
-        <v-btn icon dark @click="close">
+        <v-btn icon dark @click="closedialog">
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>Data Pasien</v-toolbar-title>
@@ -89,17 +89,18 @@
               <v-divider></v-divider>
             </template>
           </v-list>
-          <v-card-actions> </v-card-actions>
+          <v-card-actions>
+            <v-row v-show="messagews">
+              <v-col cols="12" class="grow">
+                <v-alert class="v-sheet--shaped" prominent type="warning">
+                  {{ messagews }}
+                </v-alert>
+              </v-col>
+            </v-row>
+          </v-card-actions>
         </v-card>
       </v-col>
-    </v-card><v-alert prominent type="warning">
-          <v-row align="center">
-            <v-col class="grow">
-              {{ messagews }}
-            </v-col>
-          </v-row>
-        </v-alert>
-         <v-alert
+      <!-- <v-alert
       dismissible
       color="cyan"
       border="left"
@@ -107,8 +108,9 @@
       colored-border
       icon="mdi-twitter"
     >
-      Your IP <strong>{{iplocal}}</strong> .
-    </v-alert>
+      Your IP <strong>{{ iplocal }}</strong> .
+    </v-alert>  -->
+    </v-card>
     <PrintView :sep="dataSEP" :visible_sep="check_sep" />
   </v-dialog>
 </template>
@@ -146,9 +148,10 @@ export default {
     connection: false,
   }),
   methods: {
-    close() {
+    closedialog(en) {
       this.$emit("update-number", false);
       this.cetakulang = false;
+      this.check_sep = false;
     },
     saveSEP() {
       this.loading_print = true;
@@ -188,10 +191,7 @@ export default {
         // console.log(data);
         if (data.status == 201) {
           //SEP SUCCESS
-          // var sep_no = '1108R0011221V011987';
           var sep_no = data.data.FS_NO_SEP;
-
-          // this.no_sep = response.data.data.no_sep;
           this.no_sep = sep_no;
           this.getDataSEP();
           //   this.visible_sep = true;
@@ -268,10 +268,12 @@ export default {
         // console.log(response.data);
         // this.imgttd = "data:image/png;base64," + response.data.data.image_ttd;
         var res = {
-          TTD_URL:
-            process.env.VUE_APP_URL_IMG + "asset/upload/signature/NZM315.jpg",
+          // TTD_URL:            process.env.VUE_APP_URL_IMG + "asset/upload/signature/NZM315.jpg",
+            COB : '',
+            PENJAMIN : ''
         };
         this.dataSEP = response.data.data;
+        // delete this.dataSEP.FD_TGL_LAHIR; 
         Object.assign(this.dataSEP, res);
 
         var element = {};
@@ -304,25 +306,41 @@ export default {
       // this.no_sep = this.dtanrian.fs_no_sep
       this.getDataSEP();
     },
+    //  async responseDialog(envt){
+    //   let data = envt.data;
+    //   if(data == 'Berhasil Cetak'){
+    //     alert('Berhasil Cetak')
+    //     this.closedialog(true);
+    //   }
+
+    // }
   },
   created: function () {
     // document.documentElement.style.overflow = "hidden"
     // console.log(this.users); //prints out an empty string
   },
-  mounted() {
-
-   
-  },
+  mounted() {},
   created: function () {
     //  console.log(ips);
     this.connection = new WebSocket(ips);
-    this.messagews = ips
-    this.iplocal = iplocal ;
+    this.messagews = ips;
+    this.iplocal = iplocal;
     // console.log("Starting connection to WebSocket Server");
-
+const res = this;
     this.connection.onmessage = function (event) {
       // this.messagews = "Nyambung";
-      console.log(event);
+      console.log(event.data);
+      let data = event.data;
+      if(data == 'Berhasil Cetak'){
+        // alert('Berhasil Cetak')
+         res.closedialog();
+        // this.closedialog();
+      }
+
+    };
+    this.connection.onerror = function(evt) {
+      // alert(evt)
+      console.log(evt.data);
     };
 
     this.connection.onopen = function (event) {
