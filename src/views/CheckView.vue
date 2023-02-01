@@ -125,6 +125,9 @@ export default {
     visible: {
       default: false,
     },
+    printercheck:{
+      default:false,
+    }
   },
   components: {
     PrintView,
@@ -339,7 +342,7 @@ const res = this;
 
     };
     this.connection.onerror = function(evt) {
-      // alert(evt)
+      alert(evt)
       console.log(evt.data);
     };
 

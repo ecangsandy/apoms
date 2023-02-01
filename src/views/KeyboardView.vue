@@ -31,11 +31,7 @@
         @update-number="update"
         :users="bookingdata"
       />
-       <setting
-        :visible="isSetting"
-        @close="close"
-        :users="bookingdata"
-      />
+      <setting :visible="isSetting" @close="close" :users="bookingdata" />
     </v-row>
     <v-dialog v-model="loaddialog" hide-overlay persistent width="300">
       <v-card color="primary" dark>
@@ -62,7 +58,7 @@ export default {
   components: {
     SimpleKeyboard,
     CheckView,
-    Setting
+    Setting,
   },
   data: () => ({
     input: "",
@@ -104,9 +100,9 @@ export default {
       this.input = "";
       this.$refs.booking.$el.focus();
     },
-    close(){
-  this.isSetting = false;
-  this.input = "";
+    close() {
+      this.isSetting = false;
+      this.input = "";
       this.$refs.booking.$el.focus();
     },
     getRequestParams(kd_booking) {
@@ -129,10 +125,10 @@ export default {
       console.log(this.input);
       if (this.input == ":logout") {
         this.logout();
-      } else if(this.input == ":SETTING"){
- this.isSetting = true;
-  this.loading = false;
-  this.loaddialog = false;
+      } else if (this.input == ":SETTING") {
+        this.isSetting = true;
+        this.loading = false;
+        this.loaddialog = false;
       } else {
         // const params = this.input;
         // apomAxios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
@@ -146,12 +142,12 @@ export default {
             if (response.data.error != true) {
               this.isConfirm = true;
               this.bookingdata = response.data.data;
-            } else if(response.data.status == '204') {
+            } else if (response.data.status == "204") {
               alert(response.data.message);
               this.input = "";
               this.setFocus();
-            }else {
-               alert(response.data.message);
+            } else {
+              alert(response.data.message);
             }
             this.loading = false;
             // this.bookingdata = "ASDA"
@@ -166,9 +162,9 @@ export default {
             // this.loading = false;
             // this.loaddialog = false;
           });
-          //  this.loading = false;
-          //   // this.bookingdata = "ASDA"
-          //   this.loaddialog = false;
+        //  this.loading = false;
+        //   // this.bookingdata = "ASDA"
+        //   this.loaddialog = false;
       }
     },
     setFocus: function () {
@@ -181,8 +177,8 @@ export default {
 
 <style scoped>
 body {
-    overflow: hidden;
-    height: 100vh;
+  overflow: hidden;
+  height: 100vh;
 }
 input {
   width: 100%;
