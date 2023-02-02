@@ -187,7 +187,6 @@ export default {
       fmdt.append("kodeICD", this.users.kodeICD);
       fmdt.append("FS_KD_KELAS_DIJAMIN", this.users.FS_KD_KELAS_DIJAMIN);
       fmdt.append("kd_booking", this.users.CODE_BOOKING_REG);
-      // axios.defaults.baseURL = "http://172.166.122.217/e-pasien/Api/";
       apomAxios.post("WSDaftar/registrasi", fmdt).then((response) => {
         // console.log('res'+ response.data.status);
         var data = response.data;
@@ -217,7 +216,6 @@ export default {
         // this.bookingdata = "ASDA"
         this.loading_print = false;
         this.isConfirm = true;
-        // this.dataPasien=
       });
     },
     async getAntrian() {

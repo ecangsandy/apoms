@@ -159,6 +159,9 @@ export default {
             var err = error.toJSON();
             // console.log(err.message);
             alert(err.message);
+             this.loading = false;
+            // this.bookingdata = "ASDA"
+            this.loaddialog = false;
             // this.loading = false;
             // this.loaddialog = false;
           });
@@ -193,7 +196,7 @@ input {
   display: flex;
   background-color: rgba(0, 0, 0, 0.1);
   justify-content: center;
-  width: 1024px;
+  width: 90%;
   margin: 0 auto;
   border-radius: 5px;
 }
@@ -309,7 +312,10 @@ input {
   background: rgba(5, 25, 70, 0.53);
   color: white;
 }
-
+.hg-theme-default .hg-row .hg-button {
+    margin-right: 5px;
+    min-width: 65px;
+}
 .hg-button.hg-functionBtn.hg-button-space {
   width: 350px;
 }

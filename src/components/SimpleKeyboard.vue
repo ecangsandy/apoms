@@ -7,17 +7,12 @@
     </div>
   </div>
 </template>
-
 <style>
-.hg-theme-default .hg-row .hg-button {
-    margin-right: 5px;
-    min-width: 65px;
-}
 .v-application .py-8 {
     padding-top: 32px !important;
     padding-bottom: 32px !important;
     background-color: white;
-    margin-top: 20%;
+    margin-top: 10%;
 }
 .theme--light.v-application {
     /* background: #9d2929; */
