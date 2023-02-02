@@ -10,7 +10,7 @@
         <v-toolbar-items>
           <v-btn
             :loading="loading_print"
-            :disabled="loading_print"
+            :disabled="btn_print"
             icon
             x-large
             @click="saveSEP"
@@ -125,9 +125,9 @@ export default {
     visible: {
       default: false,
     },
-    printercheck:{
-      default:false,
-    }
+    printercheck: {
+      default: false,
+    },
   },
   components: {
     PrintView,
@@ -147,6 +147,7 @@ export default {
     dtanrian: {},
     messageerror: null,
     loading_print: false,
+    btn_print: false,
     cetak_btn: false,
     connection: false,
   }),
@@ -155,6 +156,7 @@ export default {
       this.$emit("update-number", false);
       this.cetakulang = false;
       this.check_sep = false;
+      this.loading_print = false;
     },
     saveSEP() {
       this.loading_print = true;
@@ -203,12 +205,23 @@ export default {
           this.messageerror = data.message;
           // console.log(data.data.no_rm);
           this.cetak_btn = true;
+        } else if (data.status == 400) {
           this.dtanrian = data.data;
           this.getAntrian();
-        } else if (data.status == 204 || data.status == 400) {
           this.cetakulang = true;
           this.messageerror = data.message;
           this.cetak_btn = false;
+        } else {
+          //  res.$swal("Gagal", "Gagal terhubung ke " + evt.target["url"], "error");
+          res
+            .$swal({
+              title: "Gagal!",
+              text: data.message,
+              type: "error",
+            })
+            .then((result) => {
+              this.close();
+            });
         }
         // this.getDataSEP();
 
@@ -270,11 +283,11 @@ export default {
         // this.imgttd = "data:image/png;base64," + response.data.data.image_ttd;
         var res = {
           // TTD_URL:            process.env.VUE_APP_URL_IMG + "asset/upload/signature/NZM315.jpg",
-            COB : '',
-            PENJAMIN : ''
+          COB: "",
+          PENJAMIN: "",
         };
         this.dataSEP = response.data.data;
-        // delete this.dataSEP.FD_TGL_LAHIR; 
+        // delete this.dataSEP.FD_TGL_LAHIR;
         Object.assign(this.dataSEP, res);
 
         var element = {};
@@ -324,28 +337,47 @@ export default {
   created: function () {
     //  console.log(ips);
     this.connection = new WebSocket(ips);
-    this.messagews = ips;
+    // this.messagews = ips;
     this.iplocal = iplocal;
     // console.log("Starting connection to WebSocket Server");
-const res = this;
+    const res = this;
     this.connection.onmessage = function (event) {
       // this.messagews = "Nyambung";
       console.log(event.data);
       let data = event.data;
-      if(data == 'Berhasil Cetak'){
+      if (data == "Berhasil Cetak") {
         // alert('Berhasil Cetak')
-         res.closedialog();
+        res.closedialog();
         // this.closedialog();
       }
-
     };
-    this.connection.onerror = function(evt) {
-      alert(evt)
-      console.log(evt.data);
+    this.connection.onerror = function (evt) {
+      res.messagews = "Gagal terhubung ke " + evt.target["url"];
+      res.btn_print = true;
+      // alert(evt)
+      // res.$swal("Gagal", "Gagal terhubung ke " + evt.target["url"], "error");
+      res
+        .$swal({
+          title: "Gagal!",
+          text: "Gagal terhubung ke " + evt.target["url"],
+          type: "error",
+          // showCancelButton: false,
+        })
+        .then((result) => {
+          console.log("return");
+          // if (result.isConfirmed) {
+          //   location = "somewhereelse.html"
+          // }
+        });
+
+      //  res.$swal('Gagal terhubung ke '+ evt.target['url']);
+      console.log(evt.target["url"]);
     };
 
     this.connection.onopen = function (event) {
-      this.messagews = "Nyambungss";
+      // this.messagews = "Nyambungss";
+      res.messagews = false;
+      res.btn_print = false;
       // console.log(event)
       // console.log("Successfully connected to the echo websocket server...")
     };

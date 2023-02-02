@@ -6,6 +6,8 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueHtmlToPaper from 'vue-html-to-paper';
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 // const qz = require("qz-tray");
 const token = localStorage.getItem("token");
@@ -44,6 +46,7 @@ Vue.use(VueFilterDateFormat);
 Vue.use(VueHtmlToPaper, options);
 // or using the defaults with no stylesheet
 Vue.use(VueHtmlToPaper);
+Vue.use(VueSweetalert2);
 Vue.config.productionTip = false;
 
 // new Vue({
