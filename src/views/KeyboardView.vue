@@ -10,7 +10,6 @@
           label=""
           filled
           dense
-          :autofocus="true"
           :value="input"
           class="input"
           @input="onInputChange"
@@ -53,6 +52,7 @@ import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
 import Setting from "@/views/SettingView.vue";
 import { apomAxios } from "@/utils/apilocal";
+import {nextTick } from "vue"
 export default {
   //   name: "view-keyboard",
   components: {
@@ -78,15 +78,13 @@ export default {
       this.$refs.booking.$el.focus();
     },
     onKeyPress(button) {
-      console.log("button", button);
-      // this.$refs.booking.$el.focus();
+      // console.log("button", button);
       if (button == "{enter}") {
         this.loaddialog = true;
         this.getDataFromAPI();
       }
     },
     onEnter() {
-      // alert(this.input)
       this.loaddialog = true;
       this.getDataFromAPI();
     },
@@ -95,7 +93,6 @@ export default {
       this.setFocus();
     },
     update(number) {
-      // console.log("PPP" + number);
       this.isConfirm = number;
       this.input = "";
       this.$refs.booking.$el.focus();
@@ -130,8 +127,6 @@ export default {
         this.loading = false;
         this.loaddialog = false;
       } else {
-        // const params = this.input;
-        // apomAxios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
         const fmdt = new FormData();
         fmdt.append("kd_booking", this.input);
         apomAxios
@@ -160,7 +155,6 @@ export default {
             // console.log(err.message);
             alert(err.message);
              this.loading = false;
-            // this.bookingdata = "ASDA"
             this.loaddialog = false;
             // this.loading = false;
             // this.loaddialog = false;
@@ -170,15 +164,53 @@ export default {
         //   this.loaddialog = false;
       }
     },
-    setFocus: function () {
+    // setFocus: function () {
+    //   // Note, you need to add a ref="search" attribute to your input.
+      
+    //   setInterval(function () {
+    //  this.$nextTick(() => this.setFocus())
+    //   console.log('resss');
+    // }, 5000);
+    // },
+     setFocus: function() {
       // Note, you need to add a ref="search" attribute to your input.
-      this.$refs.booking.$el.focus();
+      // console.log('11');
+      this.$refs.booking.focus();
     },
+  },
+   created() {
+    window.addEventListener('keydown', (e) => {
+     this.$nextTick(() => this.setFocus());
+    });
+    // setInterval(x => {
+    //   console.log('11');
+    //   this.$nextTick(() => this.setFocus()); // this works great, just watch out with going to fast !!!
+    // }, 1000);
+    // setInterval(function () {
+    //  this.$nextTick(() => this.setFocus())
+    //   // console.log('resss');
+    // }, 5000)
+    },
+  mounted() {
+     
+    setInterval(this.setFocus(), 1000)
+    //  setInterval(function () {
+      //  console.log('res');
+      //  this.setFocus()
+      //  console.log(this.$refs.booking.$el.children[0].focus());
+      //  console.log(this.$refs.booking.);
+    //   nextTick(() => {
+    //  this.setFocus()
+    // });
+      // this.$refs.booking.$el.focus();
+
+    // }, 5000);
+    // this.$refs.booking.$el.focus();
   },
 };
 </script>
 
-<style scoped>
+<style>
 body {
   overflow: hidden;
   height: 100vh;
@@ -206,13 +238,9 @@ input {
 }
 
 .simple-keyboard-main.simple-keyboard {
-  width: 640px;
+  width: 97%;
   min-width: 640px;
   background-color: transparent;
-}
-
-.simple-keyboard-main.simple-keyboard .hg-row:first-child {
-  margin-bottom: 10px;
 }
 
 .simple-keyboard-arrows.simple-keyboard {
@@ -314,9 +342,26 @@ input {
 }
 .hg-theme-default .hg-row .hg-button {
     margin-right: 5px;
-    min-width: 65px;
+    min-width: 45px;
 }
 .hg-button.hg-functionBtn.hg-button-space {
   width: 350px;
+}
+.hg-theme-default .hg-button {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #b5b5b5;
+  border-radius: 5px;
+  box-shadow: 0 0 3px -1px rgba(0,0,0,.3);
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  height: 52px;
+  justify-content: center;
+  padding: 5px;
+}
+.hg-row  .hg-red{
+  background: aliceblue;
 }
 </style>

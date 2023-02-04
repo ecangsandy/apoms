@@ -68,6 +68,12 @@ export default {
           "{enter}",
         ],
       },
+      buttonTheme: [
+    {
+      class: "hg-red",
+      buttons: "{backspace}"
+    },
+  ]
     });
     this.keyboardNumPad = new Keyboard(".simple-keyboard-numpad", {
       ...commonKeyboardOptions,
