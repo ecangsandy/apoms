@@ -1,12 +1,12 @@
 //utils/auth.js
-import axios from 'axios'
+import axios from "axios";
 
 export function setHeaderToken(token) {
-    // console.log(token);
-    // alert('utils')
-    axios.defaults.headers.common['Authorization'] = token
+  // console.log(token);
+  // alert('utils')
+  axios.defaults.headers.common["Authorization"] = token;
 }
 
 export function removeHeaderToken() {
-    delete axios.defaults.headers.common['Authorization']
+  delete axios.defaults.headers.common["Authorization"];
 }

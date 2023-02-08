@@ -10,10 +10,10 @@ var MySocket;
 // });
 // const formdatas = new FormData();
 // formdatas.append("ip", ips);
- mainAxios.get("Setting/getWS/").then((response) => {
+mainAxios.get("Setting/getWS/").then((response) => {
   ips = response.data.data.FS_PRINTER_NAME;
-//   console.log("ok" + response.data.data.FS_PRINTER_NAME);  
-   MySocket = new WebSocket(ips);
+  //   console.log("ok" + response.data.data.FS_PRINTER_NAME);
+  MySocket = new WebSocket(ips);
 });
 // console.log(ips);
 // MySocket.onmessage = function (event) {
@@ -27,5 +27,5 @@ var MySocket;
 //     // console.log("Successfully connected to the echo websocket server...")
 //   };
 //   console.log("Starting connection to " +ips);
-    
-export { ips,MySocket};
+
+export { ips, MySocket };

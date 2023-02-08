@@ -165,7 +165,8 @@
         <tr>
           <td style="padding: 0">
             <center>
-              <img v-if="sep.image_ttd"
+              <img
+                v-if="sep.image_ttd"
                 :src="'data:image/png;base64,' + sep.image_ttd"
                 width="90px"
                 style=""
@@ -200,7 +201,9 @@
         <thead>
           <tr>
             <td style="border: 1px solid black" align="center">RESUME</td>
-            <td style="border: 1px solid black; height:20px" align="center">RESEP</td>
+            <td style="border: 1px solid black; height: 20px" align="center">
+              RESEP
+            </td>
           </tr>
         </thead>
         <tbody>

@@ -100,25 +100,13 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      <!-- <v-alert
-      dismissible
-      color="cyan"
-      border="left"
-      elevation="2"
-      colored-border
-      icon="mdi-twitter"
-    >
-      Your IP <strong>{{ iplocal }}</strong> .
-    </v-alert>  -->
     </v-card>
-    <PrintView :sep="dataSEP" :visible_sep="check_sep" />
+    <!-- <PrintView :sep="dataSEP" :visible_sep="check_sep" /> -->
   </v-dialog>
 </template>
 <script>
 import PrintView from "@/views/PrintView.vue";
 import { apomAxios, mainAxios, ips, iplocal } from "@/utils/apilocal";
-// import "../plugins/axios";
-// import { ips } from "@/utils/ws";
 export default {
   props: {
     users: {},
@@ -159,6 +147,7 @@ export default {
       this.loading_print = false;
     },
     saveSEP() {
+      const res = this;
       this.loading_print = true;
       // console.log( this.users);
       const fmdt = new FormData();
@@ -195,7 +184,8 @@ export default {
         // console.log(data);
         if (data.status == 201) {
           //SEP SUCCESS
-          var sep_no = data.data.FS_NO_SEP;
+          var sep_no = data.data.fs_no_sep;
+          // console.log(data.data);
           this.no_sep = sep_no;
           this.getDataSEP();
           //   this.visible_sep = true;
@@ -204,6 +194,8 @@ export default {
           this.cetakulang = true;
           this.messageerror = data.message;
           // console.log(data.data.no_rm);
+          this.dtanrian = data.data;
+          // console.log(this.dtanrian.fs_no_sep);
           this.cetak_btn = true;
         } else if (data.status == 400) {
           this.dtanrian = data.data;
@@ -220,7 +212,7 @@ export default {
               type: "error",
             })
             .then((result) => {
-              this.close();
+              res.close();
             });
         }
         // this.getDataSEP();
@@ -254,6 +246,7 @@ export default {
           mainAxios.post("Antrian/cetakEps/", formdatas).then((response) => {});
           // this.imgttd = "data:image/png;base64," + response.data.data.image_ttd;
           // this.dataSEP = response.data.data;
+
           // this.$htmlToPaper("cetaksep");
         }
         // this.bookingdata = "ASDA"
@@ -263,7 +256,7 @@ export default {
       });
     },
     sendMessage(message) {
-      console.log(this.connection);
+      // console.log(this.connection);
       this.connection.send(message);
     },
     async getDataSEP() {
@@ -294,7 +287,7 @@ export default {
         element.ttd_url = process.env.VUE_APP_BASE_API_APOM + this.dataSEP;
         // this.dataSEP = element.ttd_url;
         // this.dataSEP.push(element);
-        this.check_sep = true;
+        this.check_sep = false;
         // this.$htmlToPaper("cetaksep");
         // send to ws Print
 
@@ -308,40 +301,29 @@ export default {
         //   this.close();
         // });
         // }
-        // this.bookingdata = "ASDA"
         this.loaddialog = false;
         this.isConfirm = true;
         // this.dataPasien=
       });
     },
     async cetakUlang() {
-      console.log(this.dtanrian.no_rm);
+      console.log(this.dtanrian.fs_no_sep);
       this.no_sep = this.dtanrian.fs_no_sep;
+      console.log(this.no_sep);
       // this.no_sep = this.dtanrian.fs_no_sep
       this.getDataSEP();
     },
-    //  async responseDialog(envt){
-    //   let data = envt.data;
-    //   if(data == 'Berhasil Cetak'){
-    //     alert('Berhasil Cetak')
-    //     this.closedialog(true);
-    //   }
-
-    // }
-  },
-  created: function () {
-    // document.documentElement.style.overflow = "hidden"
-    // console.log(this.users); //prints out an empty string
-  },
-  mounted() {},
-  created: function () {
-    //  console.log(ips);
-    this.connection = new WebSocket(ips);
-    // this.messagews = ips;
-    this.iplocal = iplocal;
-    // console.log("Starting connection to WebSocket Server");
-    const res = this;
-    this.connection.onmessage = function (event) {
+    getWS() {
+const res = this;
+      mainAxios.get("Setting/getWS/").then((response) => {
+        if (response.data.data) {
+          var ipss = response.data.data.FS_PRINTER_NAME;
+          this.connection = new WebSocket(ipss);
+        } else {
+          ips = "ws://172.166.122.218:8085/Print";
+          this.connection = new WebSocket(ips);
+        }
+          this.connection.onmessage = function (event) {
       // this.messagews = "Nyambung";
       console.log(event.data);
       let data = event.data;
@@ -381,6 +363,33 @@ export default {
       // console.log(event)
       // console.log("Successfully connected to the echo websocket server...")
     };
+        // iplocal = response.data.iplocal;
+        // console.log("ok" + response.data.data.FS_PRINTER_NAME);
+        //  MySocket = new WebSocket(ips);
+      });
+    },
+    //  async responseDialog(envt){
+    //   let data = envt.data;
+    //   if(data == 'Berhasil Cetak'){
+    //     alert('Berhasil Cetak')
+    //     this.closedialog(true);
+    //   }
+
+    // }
+  },
+  created: function () {
+    // document.documentElement.style.overflow = "hidden"
+    // console.log(this.users); //prints out an empty string
+  },
+  mounted() {},
+  created: function () {
+    console.log("ws" + ips);
+    // this.connection = new WebSocket(ips);
+    // this.messagews = ips;
+    this.iplocal = iplocal;
+    // console.log("Starting connection to WebSocket Server");
+    
+    this.getWS();
   },
 };
 </script>

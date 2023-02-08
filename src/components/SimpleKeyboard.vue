@@ -7,19 +7,6 @@
     </div>
   </div>
 </template>
-<style>
-.v-application .py-8 {
-    padding-top: 32px !important;
-    padding-bottom: 32px !important;
-    background-color: white;
-    margin-top: 10%;
-}
-.theme--light.v-application {
-    /* background: #9d2929; */
-    color: rgba(0, 0, 0, 0.87);
-    background-image: url(https://rsudsoeselo.tegalkab.go.id/wp-content/uploads/2021/04/WhatsApp-Image-2021-04-28-at-12.55.59.jpeg);
-}
-</style>
 <script>
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
@@ -50,9 +37,9 @@ export default {
       mergeDisplay: true,
       debug: false,
       display: {
-  '{backspace}': 'Hapus',
-  '{enter}': 'OK',
-}
+        "{backspace}": "Hapus",
+        "{enter}": "OK",
+      },
     };
     this.keyboard = new Keyboard(".simple-keyboard-main", {
       ...commonKeyboardOptions,
@@ -69,11 +56,11 @@ export default {
         ],
       },
       buttonTheme: [
-    {
-      class: "hg-red",
-      buttons: "{backspace}"
-    },
-  ]
+        {
+          class: "hg-red",
+          buttons: "{backspace}",
+        },
+      ],
     });
     this.keyboardNumPad = new Keyboard(".simple-keyboard-numpad", {
       ...commonKeyboardOptions,

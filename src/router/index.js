@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import Dashboard from "@/views/KeyboardView";
+import Apom from "@/views/KeyboardView";
 
 Vue.use(VueRouter);
 
@@ -9,16 +9,18 @@ const routes = [
   {
     path: "/",
     name: "",
-    redirect: "keyboard",
-    component: () => import("@/components/Main"),
-    children: [
-      {
-        path: "/keyboard",
-        name: "keyboard",
-        component: Dashboard,
-        meta: { title: 'APOM' } 
-      },
-    ]
+    component: Apom,
+    meta: { title: 'APOM' }
+    // redirect: "keyboard",
+    // component: () => import("@/components/Main"),
+    // children: [
+    //   {
+    //     path: "/keyboard",
+    //     name: "keyboard",
+    //     component: Apom,
+    //     meta: { title: 'APOM' } 
+    //   },
+    // ]
   },
   {
     path: "/about",
@@ -57,5 +59,9 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  document.title = to.meta.title || "Other Title";
+  next();
+});
 export default router;

@@ -1,4 +1,5 @@
 <template>
+<v-app>
   <v-container class="py-8 px-6" fluid>
     <v-row>
       <v-col cols="12" class="justify-center">
@@ -45,6 +46,7 @@
       </v-card>
     </v-dialog>
   </v-container>
+</v-app>
 </template>
 
 <script>
@@ -52,7 +54,7 @@ import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
 import Setting from "@/views/SettingView.vue";
 import { apomAxios } from "@/utils/apilocal";
-import {nextTick } from "vue"
+import { nextTick } from "vue";
 export default {
   //   name: "view-keyboard",
   components: {
@@ -145,67 +147,32 @@ export default {
               alert(response.data.message);
             }
             this.loading = false;
-            // this.bookingdata = "ASDA"
+
             this.loaddialog = false;
             // this.dataPasien=
           })
           .catch(function (error) {
-            // console.log(error.toJSON());
             var err = error.toJSON();
             // console.log(err.message);
             alert(err.message);
-             this.loading = false;
+            this.loading = false;
             this.loaddialog = false;
             // this.loading = false;
             // this.loaddialog = false;
           });
-        //  this.loading = false;
-        //   // this.bookingdata = "ASDA"
-        //   this.loaddialog = false;
       }
     },
-    // setFocus: function () {
-    //   // Note, you need to add a ref="search" attribute to your input.
-      
-    //   setInterval(function () {
-    //  this.$nextTick(() => this.setFocus())
-    //   console.log('resss');
-    // }, 5000);
-    // },
-     setFocus: function() {
-      // Note, you need to add a ref="search" attribute to your input.
-      // console.log('11');
+    setFocus: function () {
       this.$refs.booking.focus();
     },
   },
-   created() {
-    window.addEventListener('keydown', (e) => {
-     this.$nextTick(() => this.setFocus());
+  created() {
+    window.addEventListener("keydown", (e) => {
+      this.$nextTick(() => this.setFocus());
     });
-    // setInterval(x => {
-    //   console.log('11');
-    //   this.$nextTick(() => this.setFocus()); // this works great, just watch out with going to fast !!!
-    // }, 1000);
-    // setInterval(function () {
-    //  this.$nextTick(() => this.setFocus())
-    //   // console.log('resss');
-    // }, 5000)
-    },
+  },
   mounted() {
-     
-    setInterval(this.setFocus(), 1000)
-    //  setInterval(function () {
-      //  console.log('res');
-      //  this.setFocus()
-      //  console.log(this.$refs.booking.$el.children[0].focus());
-      //  console.log(this.$refs.booking.);
-    //   nextTick(() => {
-    //  this.setFocus()
-    // });
-      // this.$refs.booking.$el.focus();
-
-    // }, 5000);
-    // this.$refs.booking.$el.focus();
+    setInterval(this.setFocus(), 1000);
   },
 };
 </script>
@@ -222,6 +189,7 @@ input {
   font-size: 20px;
   border: none;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .keyboardContainer {
@@ -341,19 +309,19 @@ input {
   color: white;
 }
 .hg-theme-default .hg-row .hg-button {
-    margin-right: 5px;
-    min-width: 45px;
+  margin-right: 5px;
+  min-width: 45px;
 }
 .hg-button.hg-functionBtn.hg-button-space {
   width: 350px;
 }
 .hg-theme-default .hg-button {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   align-items: center;
   background: #fff;
   border-bottom: 1px solid #b5b5b5;
   border-radius: 5px;
-  box-shadow: 0 0 3px -1px rgba(0,0,0,.3);
+  box-shadow: 0 0 3px -1px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
@@ -361,7 +329,20 @@ input {
   justify-content: center;
   padding: 5px;
 }
-.hg-row  .hg-red{
+.hg-row .hg-red {
   background: aliceblue;
+}
+</style>
+<style>
+.v-application .py-8 {
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
+  background-color: white;
+  margin-top: 10%;
+}
+.theme--light.v-application {
+  /* background: #9d2929; */
+  color: rgba(0, 0, 0, 0.87);
+  background-image: url(https://rsudsoeselo.tegalkab.go.id/wp-content/uploads/2021/04/WhatsApp-Image-2021-04-28-at-12.55.59.jpeg);
 }
 </style>

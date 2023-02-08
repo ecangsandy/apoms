@@ -64,19 +64,16 @@ export default {
     },
 
     saveSetting() {
-       let fmdt = new FormData();
+      let fmdt = new FormData();
       fmdt.append("printerserver", this.dataForm.printerserver);
-      mainAxios
-          .post("Setting/saveSettingSEP/", fmdt)
-          .then((response) => {
-            if (response.data.data) {
-              this.dataForm.printerserver = response.data.data.FS_PRINTER_NAME;
-            } else {
-              this.dataForm.printerserver = "";
-            }
-            this.iplocal = response.data.iplocal;
-          })
-
+      mainAxios.post("Setting/saveSettingSEP/", fmdt).then((response) => {
+        if (response.data.data) {
+          this.dataForm.printerserver = response.data.data.FS_PRINTER_NAME;
+        } else {
+          this.dataForm.printerserver = "";
+        }
+        this.iplocal = response.data.iplocal;
+      });
     },
   },
   watch: {

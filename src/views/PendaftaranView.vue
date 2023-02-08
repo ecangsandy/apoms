@@ -27,10 +27,14 @@
                 >
               </li>
               <li class="nav-item">
-               <router-link class="nav-link" to="/register">Pendaftaran Pasien</router-link>
+                <router-link class="nav-link" to="/register"
+                  >Pendaftaran Pasien</router-link
+                >
               </li>
               <li class="nav-item">
-                <router-link class="nav-link" to="/register">Pendaftaran Pasien</router-link>
+                <router-link class="nav-link" to="/register"
+                  >Pendaftaran Pasien</router-link
+                >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#" @click="logout">Logout</a>
@@ -78,7 +82,7 @@
                 </div>
               </div>
               <div class="row justify-content-between">
-                <div class="col-md-6 ">
+                <div class="col-md-6">
                   <div class="form-group row">
                     <label for="colFormLabel" class="col-sm-3 col-form-label"
                       >Nama Pasien</label
@@ -98,7 +102,7 @@
                       >Alamat</label
                     >
                     <div class="col-sm-9">
-                     <input
+                      <input
                         v-model="form.alamatPasien"
                         type="text"
                         class="form-control mb-2"
@@ -108,11 +112,12 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                     <label for="colFormLabel" class="col-sm-3 col-form-label"
-                      ></label
-                    >
-                    <div class="col-sm-9 ">
-                     <input
+                    <label
+                      for="colFormLabel"
+                      class="col-sm-3 col-form-label"
+                    ></label>
+                    <div class="col-sm-9">
+                      <input
                         v-model="form.alamatPasien"
                         type="text"
                         class="form-control mb-2"
@@ -122,11 +127,11 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                     <label for="colFormLabel" class="col-sm-3 col-form-label"
+                    <label for="colFormLabel" class="col-sm-3 col-form-label"
                       >Kota</label
                     >
-                    <div class="col-sm-9 ">
-                     <input
+                    <div class="col-sm-9">
+                      <input
                         v-model="form.alamatPasien"
                         type="text"
                         class="form-control mb-2"
@@ -136,11 +141,11 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                     <label for="colFormLabel" class="col-sm-3 col-form-label"
+                    <label for="colFormLabel" class="col-sm-3 col-form-label"
                       >Layanan</label
                     >
-                    <div class="col-sm-2 ">
-                     <input
+                    <div class="col-sm-2">
+                      <input
                         v-model="form.alamatPasien"
                         type="text"
                         class="form-control mb-2"
@@ -148,8 +153,8 @@
                         placeholder="Alamat"
                       />
                     </div>
-                    <div class="col-sm-7 ">
-                     <input
+                    <div class="col-sm-7">
+                      <input
                         v-model="form.alamatPasien"
                         type="text"
                         class="form-control mb-2"
