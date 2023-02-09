@@ -14,7 +14,7 @@
           :value="input"
           class="input"
           @input="onInputChange"
-          placeholder="Masukan Kode Booking "
+          placeholder="Masukan Kode Booking / No RM"
           @keyup.enter="onEnter"
           align="center"
         ></v-text-field>
@@ -330,19 +330,22 @@ input {
   padding: 5px;
 }
 .hg-row .hg-red {
-  background: aliceblue;
+  background: rgba(247, 0, 0, 0.466);
 }
 </style>
 <style>
 .v-application .py-8 {
   padding-top: 32px !important;
   padding-bottom: 32px !important;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.897);
   margin-top: 10%;
 }
+
 .theme--light.v-application {
-  /* background: #9d2929; */
   color: rgba(0, 0, 0, 0.87);
-  background-image: url(https://rsudsoeselo.tegalkab.go.id/wp-content/uploads/2021/04/WhatsApp-Image-2021-04-28-at-12.55.59.jpeg);
+  background-image: url('../assets/7080861.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 </style>

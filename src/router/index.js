@@ -60,7 +60,7 @@ const router = new VueRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  console.log(to);
+  // console.log(to);
   document.title = to.meta.title || "Other Title";
   next();
 });

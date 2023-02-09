@@ -149,9 +149,7 @@ export default {
     saveSEP() {
       const res = this;
       this.loading_print = true;
-      // console.log( this.users);
       const fmdt = new FormData();
-      // fmdt.append("kd_booking", '9ZEUFO');
       fmdt.append("FS_MR", this.users.FS_MR);
       fmdt.append("FS_KD_JAMINAN", this.users.FS_KD_JAMINAN);
       fmdt.append("FS_KD_LAYANAN", this.users.FS_KD_LAYANAN);
@@ -179,23 +177,17 @@ export default {
       fmdt.append("FS_KD_KELAS_DIJAMIN", this.users.FS_KD_KELAS_DIJAMIN);
       fmdt.append("kd_booking", this.users.CODE_BOOKING_REG);
       apomAxios.post("WSDaftar/registrasi", fmdt).then((response) => {
-        // console.log('res'+ response.data.status);
         var data = response.data;
-        // console.log(data);
         if (data.status == 201) {
           //SEP SUCCESS
           var sep_no = data.data.fs_no_sep;
-          // console.log(data.data);
           this.no_sep = sep_no;
           this.getDataSEP();
-          //   this.visible_sep = true;
         } else if (data.status == 302) {
           // SEP already
           this.cetakulang = true;
           this.messageerror = data.message;
-          // console.log(data.data.no_rm);
           this.dtanrian = data.data;
-          // console.log(this.dtanrian.fs_no_sep);
           this.cetak_btn = true;
         } else if (data.status == 400) {
           this.dtanrian = data.data;
@@ -204,7 +196,6 @@ export default {
           this.messageerror = data.message;
           this.cetak_btn = false;
         } else {
-          //  res.$swal("Gagal", "Gagal terhubung ke " + evt.target["url"], "error");
           res
             .$swal({
               title: "Gagal!",
@@ -215,57 +206,33 @@ export default {
               res.close();
             });
         }
-        // this.getDataSEP();
-
-        //   this.dataSEP = response.data.data;
-        // this.bookingdata = "ASDA"
         this.loading_print = false;
         this.isConfirm = true;
       });
     },
     async getAntrian() {
       const fmdtsep = new FormData();
-      // fmdtsep.append("no_rm", '332801100561871');
       fmdtsep.append("no_rm", this.dtanrian.no_rm);
-      // axios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
       apomAxios.post("WSDaftar/getAntrianMYSQL", fmdtsep).then((response) => {
         this.loading = false;
-        // console.log(this.dtanrian.no_rm);
         if (response.data.status == "302") {
           console.log(response.data.data);
-          // var datas = response.data;
           var formdatas = new FormData();
           formdatas.append("no_antri", response.data.data.NoAntri);
           formdatas.append("Nama", response.data.data.Nama);
           formdatas.append("NoRM", response.data.data.NoRM);
-          //           for ( var key in response.data.data ) {
-          //             console.log(item[key]);
-          //     formdatas.append(key, item[key]);
-          // }
-          //  axios.defaults.baseURL = "http://172.166.122.218/vue-service/index.php/api";
           mainAxios.post("Antrian/cetakEps/", formdatas).then((response) => {});
-          // this.imgttd = "data:image/png;base64," + response.data.data.image_ttd;
-          // this.dataSEP = response.data.data;
-
-          // this.$htmlToPaper("cetaksep");
         }
-        // this.bookingdata = "ASDA"
         this.loaddialog = false;
         this.isConfirm = true;
-        // this.dataPasien=
       });
     },
     sendMessage(message) {
-      // console.log(this.connection);
       this.connection.send(message);
     },
     async getDataSEP() {
-      // console.log(this);
-      // const params = this.input;
       const fmdt = new FormData();
       fmdt.append("no_sep", this.no_sep);
-      // fmdt.append("no_sep", '0301R0011117V000008');
-      // fmdt.append("kd_booking", "9ZEUFO");
       fmdt.append("kd_booking", this.users.CODE_BOOKING_REG);
       // axios.defaults.baseURL = "http://172.166.122.217/e-pasien/api/";
       apomAxios.post("WSDaftar/getSEP", fmdt).then((response) => {
@@ -280,37 +247,23 @@ export default {
           PENJAMIN: "",
         };
         this.dataSEP = response.data.data;
-        // delete this.dataSEP.FD_TGL_LAHIR;
         Object.assign(this.dataSEP, res);
 
         var element = {};
         element.ttd_url = process.env.VUE_APP_BASE_API_APOM + this.dataSEP;
-        // this.dataSEP = element.ttd_url;
-        // this.dataSEP.push(element);
         this.check_sep = false;
-        // this.$htmlToPaper("cetaksep");
-        // send to ws Print
-
         const data = JSON.stringify({
           command: "cetak",
           type: "cetakSEPRJalan",
           message: this.dataSEP,
         });
         this.sendMessage(data);
-        // this.$htmlToPaper("cetaksep", null, (e) => {
-        //   this.close();
-        // });
-        // }
         this.loaddialog = false;
         this.isConfirm = true;
-        // this.dataPasien=
       });
     },
     async cetakUlang() {
-      console.log(this.dtanrian.fs_no_sep);
       this.no_sep = this.dtanrian.fs_no_sep;
-      console.log(this.no_sep);
-      // this.no_sep = this.dtanrian.fs_no_sep
       this.getDataSEP();
     },
     getWS() {
@@ -320,12 +273,12 @@ const res = this;
           var ipss = response.data.data.FS_PRINTER_NAME;
           this.connection = new WebSocket(ipss);
         } else {
-          ips = "ws://172.166.122.218:8085/Print";
+          var ips = "ws://172.166.122.218:8085/Print";
           this.connection = new WebSocket(ips);
         }
           this.connection.onmessage = function (event) {
       // this.messagews = "Nyambung";
-      console.log(event.data);
+      // console.log(event.data);
       let data = event.data;
       if (data == "Berhasil Cetak") {
         // alert('Berhasil Cetak')
@@ -368,14 +321,6 @@ const res = this;
         //  MySocket = new WebSocket(ips);
       });
     },
-    //  async responseDialog(envt){
-    //   let data = envt.data;
-    //   if(data == 'Berhasil Cetak'){
-    //     alert('Berhasil Cetak')
-    //     this.closedialog(true);
-    //   }
-
-    // }
   },
   created: function () {
     // document.documentElement.style.overflow = "hidden"
@@ -383,7 +328,6 @@ const res = this;
   },
   mounted() {},
   created: function () {
-    console.log("ws" + ips);
     // this.connection = new WebSocket(ips);
     // this.messagews = ips;
     this.iplocal = iplocal;
