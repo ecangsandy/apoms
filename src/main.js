@@ -11,6 +11,8 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import { mainAxios, apomAxios } from "./utils/apilocal";
 import { ips } from "./utils/apilocal";
 import "./registerServiceWorker";
+import VueMobileDetection from 'vue-mobile-detection'
+Vue.use(VueMobileDetection)
 Vue.use(VueFilterDateFormat);
 
 Vue.use(VueSweetalert2);
@@ -24,5 +26,6 @@ new Vue({
   mainAxios,
   apomAxios,
   ips,
+  // VueMobileDetection,
   render: (h) => h(App),
 }).$mount("#app");

@@ -17,6 +17,7 @@
           placeholder="Masukan Kode Booking / No RM"
           @keyup.enter="onEnter"
           align="center"
+          :disabled="this.$isMobile()"
         ></v-text-field>
       </v-col>
       <v-col cols="12" class="justify-center">
@@ -54,7 +55,7 @@ import SimpleKeyboard from "@/components/SimpleKeyboard.vue";
 import CheckView from "@/views/CheckView.vue";
 import Setting from "@/views/SettingView.vue";
 import { apomAxios } from "@/utils/apilocal";
-import { nextTick } from "vue";
+// import { nextTick } from "vue";
 export default {
   //   name: "view-keyboard",
   components: {
@@ -165,8 +166,11 @@ export default {
     setFocus: function () {
       this.$refs.booking.focus();
     },
+
   },
   created() {
+    // alert(navigator.userAgent)
+    // console.log((navigator))
     window.addEventListener("keydown", (e) => {
       this.$nextTick(() => this.setFocus());
     });
